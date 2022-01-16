@@ -50,7 +50,6 @@ public class staffMethods extends SQLConnector{
                 System.exit(0);
             default:
                 System.out.println("PLease enter a valid instruction: ");
-                staffDashboard(username);
                 break;
 
         }
@@ -61,7 +60,7 @@ public class staffMethods extends SQLConnector{
     public static void modifyModule(String username){
         Scanner sc = new Scanner(System.in);
         System.out.print("What do you wish to do?");
-        System.out.println("\n1.Create new module\n2.Delete existing module.\n3. Edit module");
+        System.out.println("\n1.Create new module\n2.Delete existing module.\n3.Edit module\n-1.Return");
         int input = sc.nextInt();
         
         switch(input){
@@ -74,6 +73,8 @@ public class staffMethods extends SQLConnector{
             case 3:
                 editModule(username);
                 break;
+            case -1:
+                return;
         }
         
         
@@ -211,18 +212,28 @@ public class staffMethods extends SQLConnector{
         Scanner sc = new Scanner(System.in);
         System.out.print("Input the module code of the module you wishes to edit:");
         String moduleCode = sc.nextLine();
-        System.out.println("Please select the properties you wish to edit:");
-        System.out.println("\n1.Module Name\n2.Properties of module");
-        int option = sc.nextInt();
-        
-        switch(option){
-            case 1: 
-                changeNameOfCourse(moduleCode, username);
-                break;
-            case 2:
-                editProperties(moduleCode);
-                break;
-        }       
+        boolean exist = isCourseExist(moduleCode);
+        if(exist){
+            searchCourse(moduleCode);
+            System.out.println("Please select the properties you wish to edit:");
+            System.out.println("1.Module Name\n2.Properties of module\n-1.Return");
+            int option = sc.nextInt();
+
+            switch(option){
+                case 1: 
+                    changeNameOfCourse(moduleCode, username);
+                    break;
+                case 2:
+                    editProperties(moduleCode);
+                    break;
+                case -1:
+                    return;
+            }
+        }
+        else{
+            System.out.println("Course does not exist.");
+            return;
+        }
         
     }
     
@@ -243,11 +254,13 @@ public class staffMethods extends SQLConnector{
             }
             else{
                 System.out.println("Module does not exist");
-                staffDashboard(username);
+                return;
             }
             
         }catch(Exception e){
             System.out.println(e);
+        }finally{
+            System.out.println("Course name changed successfully.");
         }
         
     

@@ -366,7 +366,8 @@ public class registerCourse extends SQLConnector{
     
 
     /*check and return the occurrence the students wishes to add as an integer,
-    if the occurrence input is invalid, return 0
+    if the occurrence input is invalid/does not exist, return 0
+    if the occurrence clashes with the student's registered courses, return -1
     */ 
     public static int selectOccurrence(String courseCode, String matricNumber){
         Scanner sc = new Scanner(System.in);
