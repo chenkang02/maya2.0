@@ -4,9 +4,8 @@
  */
 package fopassignment;
 
+import static fopassignment.CourseSearchingController.isCourseExist;
 import static fopassignment.StudentMethod.studentDashboard;
-import static fopassignment.searchForCourse.courseExist;
-import static fopassignment.searchForCourse.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +16,7 @@ import java.util.Scanner;
  *
  * @author Chen Kang
  */
-public class registerCourse {
+public class registerCourse extends SQLConnector{
     public static void main(String[] args) {
         
     }
@@ -30,7 +29,7 @@ public class registerCourse {
     public static void viewRegisteredModule(String matricNumber) {
     
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             
             boolean mainSwitch = true;
@@ -107,7 +106,7 @@ public class registerCourse {
     //add the matric number of the student into the table named after the coursecode to keep a record on how many students are registered under a specific course and occurrence.
     public static void addToTable(String matricNumber, String courseCode, int occurrence){
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             String name = "";
             String email = "";
             PreparedStatement statement = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
@@ -132,7 +131,7 @@ public class registerCourse {
         int occurrence = 0;
         String moduleName = "";
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             System.out.println("Please enter the course code of the couse you wish to drop.");
             String courseCode = sc.nextLine();
             boolean isRegistered = isRegistered(matricNumber, courseCode);
@@ -178,7 +177,7 @@ public class registerCourse {
             boolean isRegistered = false;
             
             try{
-                Connection con = getConnection();
+                Connection con = getSQLConnection();
                 PreparedStatement check = con.prepareStatement("SELECT * FROM "+matricNumber+" WHERE courseCode = \'"+courseCode+"\' ");
                 ResultSet set = check.executeQuery();
                 
@@ -223,7 +222,7 @@ public class registerCourse {
             System.out.println("Credit hours have exceeded 22 hours, please drop some module to continue adding new modules.");
             return;
         }
-        boolean exist = courseExist(moduleCode);
+        boolean exist = isCourseExist(moduleCode);
         System.out.println(exist);
         int startingTime = 0;
         int endTime = 0;
@@ -348,7 +347,7 @@ public class registerCourse {
         boolean crash = false;
 
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             PreparedStatement check = con.prepareStatement("SELECT TIME1, TIME2, TIME3 FROM "+matricNumber+" WHERE (TIME1 between \'"+startTime+"\' And \'"+endTime+"\' Or TIME2 between \'"+startTime+"\' And \'"+endTime+"\' Or TIME3 between \'"+startTime+"\' And \'"+endTime+"\') And Week = \'"+week+"\'");
             ResultSet set = check.executeQuery();
 
@@ -379,7 +378,7 @@ public class registerCourse {
         ArrayList<String> week = new ArrayList<String>();
         
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             if(valid){
                 //check if the selected occurrence crashes with the student's timetable
@@ -441,7 +440,7 @@ public class registerCourse {
         boolean valid = false;
         ArrayList<Integer> occurrence = new ArrayList<Integer>();
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             PreparedStatement check = con.prepareStatement("SELECT Occurrence FROM raw WHERE ModuleCode = \'"+courseCode+"\'");
             ResultSet set = check.executeQuery();
             
@@ -465,7 +464,7 @@ public class registerCourse {
     */
     public static void createCourseTable(String courseCode){
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS "+courseCode+" (matricNumber varchar(255) NOT NULL PRIMARY KEY, FOREIGN KEY (matricNumber) REFERENCES userdata(matricNumber), name varchar(255) NOT NULL, FOREIGN KEY (name) REFERENCES userdata(NAME), email varchar(255) NOT NULL, occurrence int)");
             create.executeUpdate();
@@ -487,7 +486,7 @@ public class registerCourse {
         boolean notMax = false;
         
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             int creditHour = 0;
             
@@ -515,7 +514,7 @@ public class registerCourse {
     public static int returnBand(String matricNumber){
         int muetBand = 0;
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             PreparedStatement obtain = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
             ResultSet band = obtain.executeQuery();

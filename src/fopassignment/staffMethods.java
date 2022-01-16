@@ -5,10 +5,9 @@
 package fopassignment;
 
 import static com.company.LoginPage.runLoginPage;
-import static fopassignment.searchForCourse.courseExist;
-import static fopassignment.searchForCourse.getConnection;
-import static fopassignment.searchForCourse.searchCourse;
-import static fopassignment.searchForCourse.viewAllModules;
+import static fopassignment.CourseSearchingController.isCourseExist;
+import static fopassignment.CourseSearchingController.searchCourse;
+import static fopassignment.CourseSearchingController.viewAllModules;
 import java.util.Scanner;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +18,7 @@ import java.sql.SQLSyntaxErrorException;
  *
  * @author Chen Kang
  */
-public class staffMethods{
+public class staffMethods extends SQLConnector{
     public static void main(String[] args) {
         staffDashboard("username");
         
@@ -83,7 +82,7 @@ public class staffMethods{
     public static void createModule(String username){
         Scanner sc = new Scanner(System.in);
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             System.out.print("Enter the module code of the course you wish to add:");
             String moduleCode = sc.nextLine();
             System.out.print("Enter the module name of the course you wish to add:");
@@ -143,14 +142,14 @@ public class staffMethods{
         String moduleCode = sc.nextLine();
         searchCourse(moduleCode);
         System.out.print("Insert the occurrence of the module you wish to delete: ");
-        boolean exist = courseExist(moduleCode);
+        boolean exist = isCourseExist(moduleCode);
         if(exist){
         String occurrence = sc.nextLine();
         System.out.print("Are you sure you want to delete this module? Any changes cannot be undone. (Y/N)");
         String answer = sc.nextLine();
         
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             if(answer.equalsIgnoreCase("y")){
                 PreparedStatement delete = con.prepareStatement("DELETE FROM raw WHERE ModuleCode = \'"+moduleCode+"\' And occurrence = "+occurrence+"");
                 
@@ -177,7 +176,7 @@ public class staffMethods{
         System.out.print("Please enter the occurrence of the course: ");
         int occurrence = sc.nextInt();
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             PreparedStatement statement = con.prepareStatement("SELECT * FROM "+courseCode+" WHERE occurrence = "+occurrence+"");
             ResultSet results = statement.executeQuery();
             
@@ -232,9 +231,9 @@ public class staffMethods{
         System.out.print("Input the new name of the course:");
         String newName = sc.nextLine();
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
-            boolean exist = courseExist(moduleCode);
+            boolean exist = isCourseExist(moduleCode);
             
             if(exist){
             
@@ -277,7 +276,7 @@ public class staffMethods{
         
         if(isInteger == false){*/
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             String statement = "UPDATE RAW SET "+properties+"= \'"+newProperties+"\' WHERE ModuleCode = \'"+moduleCode+"\' and occurrence = "+occurrence+"";
             

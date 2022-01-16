@@ -4,12 +4,11 @@
  */
 package fopassignment;
 
+import static fopassignment.CourseSearchingController.searchCourse;
 import static com.company.LoginPage.runLoginPage;
+import static fopassignment.CourseSearchingController.viewAllModules;
 import static fopassignment.ViewTimetable.viewTimetable;
-import static fopassignment.getConnection.getConnection;
 import static fopassignment.registerCourse.viewRegisteredModule;
-import static fopassignment.searchForCourse.searchCourse;
-import static fopassignment.searchForCourse.viewAllModules;
 import java.util.Scanner;
 
 /**

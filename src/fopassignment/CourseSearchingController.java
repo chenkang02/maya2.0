@@ -1,24 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fopassignment;
 
+
+import fopassignment.SQLConnector;
+import static fopassignment.SQLConnector.getSQLConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package assignmentq2groupg;
-
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Scanner;
-
-/**
- *
- * @author KWT
  */
 public class CourseSearchingController extends SQLConnector {
     // This method allow user to search for existing course
@@ -127,3 +121,11 @@ public class CourseSearchingController extends SQLConnector {
         }
     }
 }
+
+
+
+
+  
+
+
+

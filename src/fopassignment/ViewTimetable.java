@@ -5,7 +5,6 @@
 package fopassignment;
 
 import static fopassignment.StudentMethod.studentDashboard;
-import static fopassignment.searchForCourse.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Chen Kang
  */
-public class ViewTimetable {
+public class ViewTimetable extends SQLConnector {
     public static void main(String[] args) {
         viewTimetable("u2102821");
     }
@@ -32,7 +31,7 @@ public class ViewTimetable {
         System.out.printf("%-15s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s%-12s", "","8:00 a.m.", "9:00 a.m.","10:00 a.m.","11:00 a.m.","12:00 p.m.","1:00 p.m.","2:00 p.m.","3:00 p.m.","4:00 p.m.","5:00 p.m.","6:00 p.m.","7:00 p.m.","8:00 p.m.");
         
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             System.out.println("");
             
             PreparedStatement select = con.prepareStatement("SELECT * FROM "+matricNumber+"");

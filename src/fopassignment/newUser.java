@@ -5,7 +5,6 @@
 package fopassignment;
 
 import static com.company.LoginPage.runLoginPage;
-import static fopassignment.searchForCourse.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Chen Kang
  */
-public class newUser {
+public class newUser extends SQLConnector {
     
     public static void main(String[] args) {
         System.out.println(correctPassword("u2102821", "Xuanfen0725"));
@@ -27,7 +26,7 @@ public class newUser {
     public static boolean existingUser(String username){
         boolean contained = false;
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             PreparedStatement search = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+username+"\'");
             
@@ -47,7 +46,7 @@ public class newUser {
     public static boolean existingStaff(String username){
         boolean contained = false;
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             PreparedStatement search = con.prepareStatement("SELECT * FROM staffData WHERE username = \'"+username+"\' ");
             
             ResultSet result = search.executeQuery();
@@ -78,7 +77,7 @@ public class newUser {
         }
         else{
              try{
-                Connection con = getConnection();
+                Connection con = getSQLConnection();
                  
                  System.out.print("Please input your siswamail: ");
                  String siswaMail = sc.nextLine();
@@ -117,7 +116,7 @@ public class newUser {
     public static void createStaff(){
         Scanner sc = new Scanner(System.in);
         try{
-        Connection con = getConnection();
+        Connection con = getSQLConnection();
         System.out.println("Please enter your UMmail: ");
         String UMmail = sc.nextLine();
         boolean existed = existingStaff(UMmail);
@@ -155,7 +154,7 @@ public class newUser {
         String password = "";
         boolean correct = false;
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
                 PreparedStatement check = con.prepareStatement("SELECT password FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
             
@@ -187,7 +186,7 @@ public class newUser {
         String password = "";
         boolean correct = false;
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             PreparedStatement check = con.prepareStatement("SELECT * FROM staffdata WHERE username = \'"+username+"\'");
             
@@ -232,7 +231,7 @@ public class newUser {
     
       public static void createTableForUser(String matricNumber){
         try{
-            Connection con = getConnection();
+            Connection con = getSQLConnection();
             
             PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXISTS "+matricNumber+" (enrollmentID int NOT NULL AUTO_INCREMENT PRIMARY KEY, courseCode varchar(255), ModuleName varchar(255), Lecturer varchar(255), Occurence int, creditHour int, Week varchar(255), TIME1 int, TIME2 int, TIME3 int)");
             
