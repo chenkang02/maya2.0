@@ -24,7 +24,7 @@ public class SQLConnector {
 
     public static Connection getSQLConnection() throws Exception{
         try{
-            String driver = "com.mysql.jdbc.Driver";
+            String driver = "com.mysql.cj.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/maya2.0";
             String username = "root";
             String password = "CKlim@98305751";

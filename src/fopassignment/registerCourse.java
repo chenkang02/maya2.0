@@ -223,7 +223,6 @@ public class registerCourse extends SQLConnector{
             return;
         }
         boolean exist = isCourseExist(moduleCode);
-        System.out.println(exist);
         int startingTime = 0;
         int endTime = 0;
         String dayOfTheWeek = "";
@@ -276,6 +275,9 @@ public class registerCourse extends SQLConnector{
             
             if(occurrence == 0){
                 System.out.println("Occurrence does not exist.");
+                return;
+            }
+            else if (occurrence == -1){
                 return;
             }
             else{
@@ -420,7 +422,7 @@ public class registerCourse extends SQLConnector{
                     
                     if(clashLecture || clashTutorial || clash){
                         System.out.println("Selected occurrences clashes with your current timetable, please select a new occurrence.");
-                        return 0;
+                        return -1;
                     }
                     else{
                         return occurrence;

@@ -75,7 +75,8 @@ public class CourseSearchingController extends SQLConnector {
                 array.add(results.getString("ModuleName"));
                 moduleCode.add(results.getString("ModuleCode"));
             }
-            if (moduleCode.contains(userInput)) return true;
+            if (moduleCode.contains(userInput.toUpperCase())) 
+                return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
