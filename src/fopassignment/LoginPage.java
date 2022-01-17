@@ -22,22 +22,23 @@ public class LoginPage extends SQLConnector{
     public static void runLoginPage() {
         boolean mainSwitch = true;
         while(mainSwitch){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println("|                    Welcome to Group G module registration platform                    |");
-        System.out.println("|---------------------------------------------------------------------------------------|");
-        System.out.println("|NOTE: You can press \"0\" to exit or \"-1\" to return to login page if you see \"*\".        |");
-        System.out.println("|1. Login to an existing account.                                                       |");
-        System.out.println("|2. Sign up a new account.                                                              |");
-        System.out.println("|3. Reset Password.                                                                     |");
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.print("*Press any number stated above to continue: ");
-        String instructionNum = sc.nextLine();
-        while (!isValidInstruction(instructionNum)) {
-            System.out.print("*Please enter valid instruction: ");
-            instructionNum = sc.nextLine();
-        }
-        carrySpecificInstruction(instructionNum);
+            Scanner sc = new Scanner(System.in);
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.println("|                    Welcome to Group G module registration platform                    |");
+            System.out.println("|---------------------------------------------------------------------------------------|");
+            System.out.println("|NOTE: You can press \"0\" to exit or \"-1\" to return to login page if you see \"*\".        |");
+            System.out.println("|1. Login to an existing account.                                                       |");
+            System.out.println("|2. Sign up a new account.                                                              |");
+            System.out.println("|3. Reset Password.                                                                     |");
+            System.out.println("|0. Quit program");
+            System.out.println("-----------------------------------------------------------------------------------------");
+            System.out.print("*Press any number stated above to continue: ");
+            String instructionNum = sc.nextLine();
+            while (!isValidInstruction(instructionNum)) {
+                System.out.print("*Please enter valid instruction: ");
+                instructionNum = sc.nextLine();
+            }
+            carrySpecificInstruction(instructionNum);
         }
         
     
