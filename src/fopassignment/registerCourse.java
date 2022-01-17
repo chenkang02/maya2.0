@@ -5,7 +5,6 @@
 package fopassignment;
 
 import static fopassignment.CourseSearchingController.isCourseExist;
-import static fopassignment.StudentMethod.studentDashboard;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -69,7 +68,7 @@ public class registerCourse extends SQLConnector{
                 System.out.println("");
                 
                 Scanner sc = new Scanner(System.in);
-                System.out.println("1. Add module\n2. Drop module\n3. Return\n-1.Quit");
+                System.out.println("1. Add module\n2. Drop module\n3. Return\n-1. Quit\n");
                 System.out.print("Please enter your choice:");
                 int choice = sc.nextInt();
                 sc.nextLine();
@@ -134,6 +133,7 @@ public class registerCourse extends SQLConnector{
             String courseCode = sc.nextLine();
             boolean isRegistered = isRegistered(matricNumber, courseCode);
             
+            //Check whether the course is registered by the student or not
             if(isRegistered){
                 PreparedStatement statement = con.prepareStatement("SELECT * FROM "+matricNumber+" WHERE courseCode = \'"+courseCode+"\' ");
                 ResultSet set = statement.executeQuery();
@@ -147,8 +147,14 @@ public class registerCourse extends SQLConnector{
                 String answer = sc.nextLine();
                 
                 if(answer.equalsIgnoreCase("y")){
+                    /*Delete from the table 'matricNumber' which stores all of the module
+                    the student registered*/
                     PreparedStatement drop = con.prepareStatement("DELETE FROM "+matricNumber+" WHERE courseCode = \'"+courseCode+"\' ");
                     drop.executeUpdate();
+                    /*
+                    Delete from the table 'courseCode' which stores all of the data
+                    of students who registered for the course
+                    */
                     PreparedStatement drop2 = con.prepareStatement("DELETE FROM "+courseCode+" WHERE matricNumber = \'"+matricNumber+"\' ");
                     drop2.executeUpdate();
                     System.out.println("Module successfully dropped.");
@@ -221,9 +227,9 @@ public class registerCourse extends SQLConnector{
             return;
         }
         boolean exist = isCourseExist(moduleCode);
-        int startingTime = 0;
-        int endTime = 0;
-        String dayOfTheWeek = "";
+        int startingTime;
+        int endTime;
+        String dayOfTheWeek;
 
         if(exist){
             try{
@@ -249,14 +255,13 @@ public class registerCourse extends SQLConnector{
                 if(startingTime == 0 || endTime == 0){
                     timeInvalid = true;
                 }
-                String time = "";
+                String time;
                 if(timeInvalid){
                     time = "-------";
                 }
                 else{
                     time = startingTime + ":00 - " + endTime + ":00";
                 }
-                int creditHour = module.getInt("credithour");
                 System.out.printf("%-20s%-55s%-20s%-10s%-55s%-13s%-17s%-15s%n", moduleCode, moduleName, occurrence, activity, tutor, dayOfTheWeek, time , credithour);
             }
             
@@ -273,10 +278,8 @@ public class registerCourse extends SQLConnector{
             
             if(occurrence == 0){
                 System.out.println("Occurrence does not exist.");
-                return;
             }
             else if (occurrence == -1){
-                return;
             }
             else{
                 try{
@@ -374,9 +377,9 @@ public class registerCourse extends SQLConnector{
         boolean clash = false;
         boolean clashLecture = false;
         boolean clashTutorial = false;
-        ArrayList<Integer> startTime = new ArrayList<Integer>();
-        ArrayList<Integer> endTime = new ArrayList<Integer>();
-        ArrayList<String> week = new ArrayList<String>();
+        ArrayList<Integer> startTime = new ArrayList<>();
+        ArrayList<Integer> endTime = new ArrayList<>();
+        ArrayList<String> week = new ArrayList<>();
         
         try{
             Connection con = getSQLConnection();
@@ -439,7 +442,7 @@ public class registerCourse extends SQLConnector{
     //check if the occurrence the student selected is valid and exists
     public static boolean checkOccurrence(String courseCode, int occurrence2){
         boolean valid = false;
-        ArrayList<Integer> occurrence = new ArrayList<Integer>();
+        ArrayList<Integer> occurrence = new ArrayList<>();
         try{
             Connection con = getSQLConnection();
             PreparedStatement check = con.prepareStatement("SELECT Occurrence FROM raw WHERE ModuleCode = \'"+courseCode+"\'");
