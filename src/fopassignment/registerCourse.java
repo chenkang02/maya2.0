@@ -222,7 +222,6 @@ public class registerCourse extends SQLConnector{
         boolean registered = isRegistered(matricNumber, moduleCode);
                 if(registered){
                     System.out.println("Course is already registerd!");
-                    //studentDashboard(matricNumber);
                     return;
                 }
                 
@@ -240,109 +239,112 @@ public class registerCourse extends SQLConnector{
         if(exist){
             try{
                 PreparedStatement extract = con.prepareStatement("SELECT * FROM raw WHERE ModuleCode = \'"+moduleCode+"\'");
-            ResultSet module = extract.executeQuery();
-            System.out.printf("%-20s%-55s%-20s%-10s%-55s%-13s%-17s%-15s%n","ModuleCode", "ModuleName", "Occurrence","Activity", "Tutor", "Week", "Time", "Credit hours");
+                ResultSet module = extract.executeQuery();
+                System.out.printf("%-20s%-55s%-20s%-10s%-55s%-13s%-17s%-15s%n","ModuleCode", "ModuleName", "Occurrence","Activity", "Tutor", "Week", "Time", "Credit hours");
             
-            while(module.next()){
-                String moduleName = module.getString("ModuleName");
-                int occurrence = module.getInt("occurrence");
-                String activity = module.getString("Activity");
-                String tutor = module.getString("Tutor");
-                int credithour = module.getInt("credithour");
-                dayOfTheWeek = module.getString("Week");
-                startingTime = module.getInt("TIME1");
-                endTime = module.getInt("TIME2");
-                int time3 = module.getInt("TIME3");
-                boolean timeInvalid = false;
-                
-                if(time3 != 0){
-                    endTime = time3;
-                }
-                if(startingTime == 0 || endTime == 0){
-                    timeInvalid = true;
-                }
-                String time;
-                if(timeInvalid){
-                    time = "-------";
-                }
-                else{
-                    time = startingTime + ":00 - " + endTime + ":00";
-                }
-                System.out.printf("%-20s%-55s%-20s%-10s%-55s%-13s%-17s%-15s%n", moduleCode, moduleName, occurrence, activity, tutor, dayOfTheWeek, time , credithour);
-            }
-            
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            
-            
-            //pick occurence
-            System.out.println("Please select an occurence");
-            int occurrence = selectOccurrence(moduleCode, matricNumber);
-            
-            int creditHour = 0;
-            
-            if(occurrence == 0){
-                System.out.println("Occurrence does not exist.");
-            }
-            else if (occurrence == -1){
-            }
-            else{
-                try{
-                    PreparedStatement select = con.prepareStatement("SELECT * FROM raw WHERE ModuleCode = \'"+moduleCode+"\' And Occurrence = \'"+occurrence+"\'  ");
-                    
-                    ResultSet results = select.executeQuery();
-                    try{
-                        PreparedStatement count = con.prepareStatement("SELECT * FROM "+matricNumber+"");
-                        ResultSet set = count.executeQuery();
+                while(module.next()){
+                    String moduleName = module.getString("ModuleName");
+                    int occurrence = module.getInt("occurrence");
+                    String activity = module.getString("Activity");
+                    String tutor = module.getString("Tutor");
+                    int credithour = module.getInt("credithour");
+                    dayOfTheWeek = module.getString("Week");
+                    startingTime = module.getInt("TIME1");
+                    endTime = module.getInt("TIME2");
+                    int time3 = module.getInt("TIME3");
+                    boolean timeInvalid = false;
 
-                        while(set.next()){
-                            int temp = set.getInt("credithour");
-                            creditHour += temp;
-                        }
-                        createCourseTable(moduleCode);
+                    if(time3 != 0){
+                        endTime = time3;
+                    }
+                    if(startingTime == 0 || endTime == 0){
+                        timeInvalid = true;
+                    }
+                    String time;
+                    if(timeInvalid){
+                        time = "-------";
+                    }
+                    else{
+                        time = startingTime + ":00 - " + endTime + ":00";
+                    }
+                    System.out.printf("%-20s%-55s%-20s%-10s%-55s%-13s%-17s%-15s%n", moduleCode, moduleName, occurrence, activity, tutor, dayOfTheWeek, time , credithour);
+                }
 
-                    }catch(SQLException e){
-                        System.out.println(e);
-                    }
-                    
-                    
-                    //check whether the credit hour has exceeded 22 or not;
-                    while(results.next()){
-                        String courseCode = results.getString("ModuleCode");
-                        String moduleName = results.getString("ModuleName");
-                        String lecturer = results.getString("Tutor");
-                        int creditHours = results.getInt("credithour");
-                        String week = results.getString("Week");
-                        int TIME1 = results.getInt("TIME1");
-                        int TIME2 = results.getInt("TIME2");
-                        int TIME3 = results.getInt("TIME3");
-                        
-                        if(creditHour + creditHours > 22){
-                            System.out.println("You have reached maximum credit hour, please drop some module to add new modules.");
-                            viewRegisteredModule(matricNumber);
-                        }
-                        
-                        PreparedStatement insert = con.prepareStatement("INSERT INTO "+matricNumber
-                                + "(courseCode, ModuleName, Lecturer, Occurence, creditHour, Week, TIME1, TIME2, TIME3) "
-                                + "VALUES (\'"+courseCode+"\', \'"+moduleName+"\', \'"+addSlash(lecturer)+"\', "+occurrence+", "+creditHours+", \'"+week+"\', "+TIME1+", "+TIME2+", "+TIME3+");");
-                        insert.executeUpdate();
-                        
-                    }
-                    
-                    
-                    addToTable(matricNumber, moduleCode, occurrence);
-                }catch(SQLException e){
-                    System.out.println(e);
                 }catch(Exception e){
                     System.out.println(e);
                 }
-            }
+
+
+                //pick occurence
+                    System.out.println("Please select an occurence");
+                int occurrence = selectOccurrence(moduleCode, matricNumber);
+
+                int creditHour = 0;
+
+                if(occurrence == 0){
+                    System.out.println("Occurrence does not exist.");
+                }
+                else if(occurrence == -1){
+                    System.out.println("Selected occurrences clashes with your current timetable, please select a new occurrence.");
+                }
+                
+                else{
+                    try{
+                        PreparedStatement select = con.prepareStatement("SELECT * FROM raw WHERE ModuleCode = \'"+moduleCode+"\' And Occurrence = \'"+occurrence+"\'  ");
+
+                        ResultSet results = select.executeQuery();
+                        try{
+                            PreparedStatement count = con.prepareStatement("SELECT * FROM "+matricNumber+"");
+                            ResultSet set = count.executeQuery();
+
+                            while(set.next()){
+                                int temp = set.getInt("credithour");
+                                creditHour += temp;
+                            }
+                            
+                            //Create course table to store the data of students who registered for the course if not exist
+                            createCourseTable(moduleCode);
+
+                        }catch(SQLException e){
+                            System.out.println(e);
+                        }
+
+
+                        //check whether the credit hour has exceeded 22 or not;
+                        while(results.next()){
+                            String courseCode = results.getString("ModuleCode");
+                            String moduleName = results.getString("ModuleName");
+                            String lecturer = results.getString("Tutor");
+                            int creditHours = results.getInt("credithour");
+                            String week = results.getString("Week");
+                            int TIME1 = results.getInt("TIME1");
+                            int TIME2 = results.getInt("TIME2");
+                            int TIME3 = results.getInt("TIME3");
+
+                            if(creditHour + creditHours > 22){
+                                System.out.println("You have reached maximum credit hour, please drop some module to add new modules.");
+                                return;
+                            }
+
+                            PreparedStatement insert = con.prepareStatement("INSERT INTO "+matricNumber
+                                    + "(courseCode, ModuleName, Lecreturnturer, Occurence, creditHour, Week, TIME1, TIME2, TIME3) "
+                                    + "VALUES (\'"+courseCode+"\', \'"+moduleName+"\', \'"+addSlash(lecturer)+"\', "+occurrence+", "+creditHours+", \'"+week+"\', "+TIME1+", "+TIME2+", "+TIME3+");");
+                            insert.executeUpdate();
+
+                        }
+
+
+                        addToTable(matricNumber, moduleCode, occurrence);
+                    }catch(SQLException e){
+                        System.out.println(e);
+                    }catch(Exception e){
+                        System.out.println(e);
+                    }
+                }
 
         }
         else{
             System.out.println("Module does not exist.");
-            viewRegisteredModule(matricNumber);
         }
         
     }
@@ -429,7 +431,7 @@ public class registerCourse extends SQLConnector{
                     
                     
                     if(clashLecture || clashTutorial || clash){
-                        System.out.println("Selected occurrences clashes with your current timetable, please select a new occurrence.");
+                        
                         return -1;
                     }
                     else{
@@ -469,7 +471,7 @@ public class registerCourse extends SQLConnector{
     }
     
     
-    /*create a seperate table for each course to store the data of the students
+    /*create a seperate table for each course if not exist yet to store the data of the students
     who have registered the course.
     */
     public static void createCourseTable(String courseCode){
