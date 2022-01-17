@@ -20,7 +20,8 @@ public class LoginPage extends SQLConnector{
 
     //This is the main login page
     public static void runLoginPage() {
-        try{
+        boolean mainSwitch = true;
+        while(mainSwitch){
         Scanner sc = new Scanner(System.in);
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("|                    Welcome to Group G module registration platform                    |");
@@ -37,9 +38,8 @@ public class LoginPage extends SQLConnector{
             instructionNum = sc.nextLine();
         }
         carrySpecificInstruction(instructionNum);
-        }catch(Exception e){
-            System.out.println(e);
         }
+        
     
     }
     
@@ -175,38 +175,105 @@ public class LoginPage extends SQLConnector{
             }
         }    
         String nameOfStudent = "";
+        String nameOfStaff = "";
         if (correct) {
             System.out.println("Succesfully login.");
             
             try{
                 Connection con = getSQLConnection();
                 PreparedStatement getName = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
+                PreparedStatement getStaff = con.prepareStatement("SELECT * FROM staffData WHERE username = \'"+matricNumber+"\'");
                 
                 ResultSet name = getName.executeQuery();
+                ResultSet staffName = getStaff.executeQuery();
                 
                 while(name.next()){
                     nameOfStudent = name.getString("name");
+                }
+                while(staffName.next()){
+                    nameOfStaff = staffName.getString("fullName");
                 }
                 
             }catch(Exception e){
                 System.out.println(e);
             }
-            System.out.println("Welcome " + nameOfStudent + "!");
+            
             
             if(role.equalsIgnoreCase("student")){
-            studentDashboard(matricNumber);
+                System.out.println("Welcome " + nameOfStudent + "!");
+                studentDashboard(matricNumber);
             }
             
             else if(role.equalsIgnoreCase("staff")){
-            staffDashboard(matricNumber);
+                System.out.println("Welcome " + nameOfStaff + "!");
+                staffDashboard(matricNumber);
             }
         } else {
             System.out.println("Please reset your password, you have no more chances.");
-            //1
+            resetPassword(matricNumber, role);
         }
         
     }
     
+    public static void resetPassword(String matricNumber, String role){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Please enter your new password: ");
+        String password = sc.nextLine();
+        System.out.print("Please reenter your new password: ");
+        String password2= sc.nextLine();
+        String oldPassword = "";
+        String newPassword = "";
+        if(password.equals(password2)){
+            newPassword = password2;
+            }
+        
+        if(role.equalsIgnoreCase("student")){
+            try{
+                Connection con = getSQLConnection();
 
-   
+                PreparedStatement select = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
+                ResultSet data = select.executeQuery();
+                while(data.next()){
+                    oldPassword = data.getString("password");
+                }
+            if(newPassword.equals(oldPassword)){
+                System.out.println("Sorry, new password cannot be old password");
+                return;
+            }
+            else{
+                    PreparedStatement change = con.prepareStatement("UPDATE userdata SET password = \'"+newPassword+"\' WHERE matricNumber = \'"+matricNumber+"\'");
+                    change.executeUpdate();
+                    System.out.println("Password changed successfully.");
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+        else if(role.equalsIgnoreCase("staff")){
+            try{
+                Connection con = getSQLConnection();
+                PreparedStatement select = con.prepareStatement("SELECT * FROM staffData WHERE username = \'"+matricNumber+"\'");
+                ResultSet data = select.executeQuery();
+                while(data.next()){
+                    oldPassword = data.getString("password");
+                }
+                
+                if(newPassword.equals(oldPassword)){
+                System.out.println("Sorry, new password cannot be old password");
+                return;
+                }
+                else{
+                    PreparedStatement change = con.prepareStatement("UPDATE staffData SET password = \'"+newPassword+"\' WHERE username = \'"+matricNumber+"\'");
+                    change.executeUpdate();
+                    System.out.println("Password successfully changed.");
+                }
+          
+            }catch(Exception e){
+                System.out.println(e);
+                
+            }
+        }
+                    
+                    
+}
 }

@@ -276,8 +276,8 @@ public class staffMethods extends SQLConnector{
         String properties = sc.nextLine();
         System.out.print("Input the new "+properties+":");
         String newProperties = sc.nextLine();
-        int number = 0;
-        boolean isInteger = true;
+        //int number = 0;
+        //boolean isInteger = true;
         /*try{
            
             number = Integer.parseInt(newProperties);
@@ -291,10 +291,11 @@ public class staffMethods extends SQLConnector{
         try{
             Connection con = getSQLConnection();
             
-            String statement = "UPDATE RAW SET "+properties+"= \'"+newProperties+"\' WHERE ModuleCode = \'"+moduleCode+"\' and occurrence = "+occurrence+"";
+            String statement = "UPDATE raw SET "+properties+"= \'"+newProperties+"\' WHERE ModuleCode = \'"+moduleCode+"\' and occurrence = "+occurrence+"";
             
             PreparedStatement edit = con.prepareStatement(statement);
             edit.executeUpdate();
+            System.out.println("Changes made successfully.");
         }catch(Exception e){
             System.out.println(e);
         }
