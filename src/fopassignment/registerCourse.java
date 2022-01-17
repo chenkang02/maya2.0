@@ -54,9 +54,6 @@ public class registerCourse extends SQLConnector{
                 ResultSet module = registeredModule.executeQuery();
                 
                 while(module.next()){
-                    int startTime = module.getInt("TIME1");
-                    int TIME2 = module.getInt("TIME2");
-                    
                     enrollmentID.add(module.getInt("enrollmentID"));
                     courseCode.add(module.getString("courseCode"));
                     moduleName.add(module.getString("ModuleName"));
@@ -72,12 +69,11 @@ public class registerCourse extends SQLConnector{
                 System.out.println("");
                 
                 Scanner sc = new Scanner(System.in);
-                System.out.println("1. Add module\n2. Drop module\n3. Return\n\n");
+                System.out.println("1. Add module\n2. Drop module\n3. Return\n-1.Quit");
                 System.out.print("Please enter your choice:");
                 int choice = sc.nextInt();
                 sc.nextLine();
                 
-                boolean switch2 = true;
                 switch(choice){
                     case 1:
                         System.out.print("Please input the moduleCode you wish to register.");
@@ -88,12 +84,14 @@ public class registerCourse extends SQLConnector{
                         drop(matricNumber);
                         break;
                     case 3:
-                        studentDashboard(matricNumber);
-                        break;
-                    case -1:
                         mainSwitch = false;
                         break;
-                
+                    case -1:
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Please input a valid instruction:");
+                        break;
                 }
                 
             }
