@@ -5,7 +5,7 @@
 package fopassignment;
 
 import static fopassignment.CourseSearchingController.searchCourse;
-import static com.company.LoginPage.runLoginPage;
+import static fopassignment.LoginPage.runLoginPage;
 import static fopassignment.CourseSearchingController.viewAllModules;
 import static fopassignment.ViewTimetable.viewTimetable;
 import static fopassignment.registerCourse.viewRegisteredModule;

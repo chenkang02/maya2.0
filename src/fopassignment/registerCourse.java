@@ -327,7 +327,7 @@ public class registerCourse extends SQLConnector{
                             }
 
                             PreparedStatement insert = con.prepareStatement("INSERT INTO "+matricNumber
-                                    + "(courseCode, ModuleName, Lecreturnturer, Occurence, creditHour, Week, TIME1, TIME2, TIME3) "
+                                    + "(courseCode, ModuleName, Lecturer, Occurence, creditHour, Week, TIME1, TIME2, TIME3) "
                                     + "VALUES (\'"+courseCode+"\', \'"+moduleName+"\', \'"+addSlash(lecturer)+"\', "+occurrence+", "+creditHours+", \'"+week+"\', "+TIME1+", "+TIME2+", "+TIME3+");");
                             insert.executeUpdate();
 
@@ -389,6 +389,7 @@ public class registerCourse extends SQLConnector{
         ArrayList<Integer> endTime = new ArrayList<>();
         ArrayList<String> week = new ArrayList<>();
         
+        
         try{
             Connection con = getSQLConnection();
             
@@ -444,7 +445,6 @@ public class registerCourse extends SQLConnector{
             System.out.println(e);
         }
         return 0;
-        
     }
     
     //check if the occurrence the student selected is valid and exists

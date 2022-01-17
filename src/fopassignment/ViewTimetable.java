@@ -97,7 +97,6 @@ public class ViewTimetable extends SQLConnector {
                 choice = sc.nextInt();    
                 } while(choice != -1);
                 studentDashboard(matricNumber);
-                sc.close();
             
         }catch(Exception e){
         System.out.println(e);

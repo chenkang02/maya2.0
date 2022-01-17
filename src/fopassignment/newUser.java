@@ -4,11 +4,10 @@
  */
 package fopassignment;
 
-import static com.company.LoginPage.runLoginPage;
+import static fopassignment.LoginPage.runLoginPage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -101,7 +100,6 @@ public class newUser extends SQLConnector {
                 PreparedStatement insert = con.prepareStatement("INSERT INTO userdata (matricNumber, siswaMail, password, muetBand, name) VALUES ('"+matricNumber+"', '"+siswaMail+"', '"+password2+"', '"+muetBand+"', \'"+nameUpper+"\')");
                 insert.executeUpdate();  
                 createTableForUser(matricNumber);
-                sc.close();
             }catch(Exception e){
                 System.out.println(e);
             }finally{
@@ -136,7 +134,6 @@ public class newUser extends SQLConnector {
         PreparedStatement insert = con.prepareStatement("INSERT INTO staffData (UMmail, username, password, fullName) VALUES ('"+UMmail+"', '"+username+"', '"+password+"', '"+name+"' )");
         
         insert.executeUpdate();
-        sc.close();
         }
         }catch(Exception e){
             System.out.println(e);
@@ -170,7 +167,6 @@ public class newUser extends SQLConnector {
                 correct = true;
                 return correct;
             }
-            sc.close();
 
         }catch(Exception e){
             System.out.println(e);
@@ -199,7 +195,6 @@ public class newUser extends SQLConnector {
                     correct = true;
                     return correct;
             }
-                sc.close();
             
         }catch(Exception e){
             System.out.println(e);

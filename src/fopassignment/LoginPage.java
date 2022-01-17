@@ -1,4 +1,4 @@
-package com.company;
+package fopassignment;
 
 import static fopassignment.StudentMethod.studentDashboard;
 import static fopassignment.newUser.createStaff;
@@ -8,15 +8,19 @@ import static fopassignment.newUser.existingUser;
 import static fopassignment.newUser.correctPassword;
 import static fopassignment.newUser.correctStaffPassword;
 import static fopassignment.staffMethods.staffDashboard;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.util.Scanner;
+import java.sql.ResultSet;
 
-public class LoginPage{
+public class LoginPage extends SQLConnector{
     public static void main(String[] args) {
         runLoginPage();
     }
 
     //This is the main login page
     public static void runLoginPage() {
+        try{
         Scanner sc = new Scanner(System.in);
         System.out.println("-----------------------------------------------------------------------------------------");
         System.out.println("|                    Welcome to Group G module registration platform                    |");
@@ -33,6 +37,10 @@ public class LoginPage{
             instructionNum = sc.nextLine();
         }
         carrySpecificInstruction(instructionNum);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
     }
     
     //This method is used to check whether the instruction entered is valid or not
@@ -50,13 +58,15 @@ public class LoginPage{
     
     //The programme starts branching to respective area according to the instruction num entered 
     public static void carrySpecificInstruction(String instructionNum) {
+        
+        
         switch (instructionNum) {
             case "-1":
                 runLoginPage();
                 break;
             case "0":
                 System.out.println("Bye, hope to see u again.");
-                System.exit(1);
+                System.exit(0);
                 break;
             case "1":
                 enterCredential();
@@ -67,7 +77,10 @@ public class LoginPage{
             case "3":
                 //reset password
                 break;
+            default:
+                runLoginPage();
         }
+        
     }
     
     
@@ -86,7 +99,6 @@ public class LoginPage{
             else {
                 System.out.println("The username doesn't exists. Please create an account and login again.");
                 runLoginPage();
-                System.exit(1);
             }
         } else {
             System.out.print("*Please enter your matric number: ");
@@ -162,10 +174,24 @@ public class LoginPage{
             correct = correctStaffPassword(matricNumber, pass);
             }
         }    
-
+        String nameOfStudent = "";
         if (correct) {
             System.out.println("Succesfully login.");
-            System.out.println("Welcome " + matricNumber + " !");
+            
+            try{
+                Connection con = getSQLConnection();
+                PreparedStatement getName = con.prepareStatement("SELECT * FROM userdata WHERE matricNumber = \'"+matricNumber+"\'");
+                
+                ResultSet name = getName.executeQuery();
+                
+                while(name.next()){
+                    nameOfStudent = name.getString("name");
+                }
+                
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            System.out.println("Welcome " + nameOfStudent + "!");
             
             if(role.equalsIgnoreCase("student")){
             studentDashboard(matricNumber);

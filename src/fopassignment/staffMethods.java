@@ -4,7 +4,7 @@
  */
 package fopassignment;
 
-import static com.company.LoginPage.runLoginPage;
+import static fopassignment.LoginPage.runLoginPage;
 import static fopassignment.CourseSearchingController.isCourseExist;
 import static fopassignment.CourseSearchingController.searchCourse;
 import static fopassignment.CourseSearchingController.viewAllModules;
