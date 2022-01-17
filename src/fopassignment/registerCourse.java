@@ -182,6 +182,12 @@ public class registerCourse extends SQLConnector{
             
             try{
                 Connection con = getSQLConnection();
+                /*
+                The select statement check whether the table of the student contains the 
+                courseCode, set.next() will be true when the ResultSet contains at least
+                one instance from the query of the database and will return false if none 
+                of the instance is selected after the query.
+                */
                 PreparedStatement check = con.prepareStatement("SELECT * FROM "+matricNumber+" WHERE courseCode = \'"+courseCode+"\' ");
                 ResultSet set = check.executeQuery();
                 
