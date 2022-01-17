@@ -23,6 +23,11 @@ public class ViewTimetable extends SQLConnector {
     public static void viewTimetable(String matricNumber){
         Scanner sc = new Scanner(System.in);
         
+        /*
+        create 2 arrays to store the location of the day and time, the maximum number
+        of days is 5 and the maximum number of hours of classes per day is 13, therefore
+        the size of the array[i][]j is i = 5 and j = 13.
+        */
         int[][] time = new int[5][13];
         String[][] module = new String[5][13];
         
@@ -36,6 +41,10 @@ public class ViewTimetable extends SQLConnector {
             
             PreparedStatement select = con.prepareStatement("SELECT * FROM "+matricNumber+"");
             ResultSet results = select.executeQuery();
+            
+            /*
+            while the result set contains another row, 
+            */
             while(results.next()){
                 String moduleCode = results.getString("courseCode");
                 int dayWeek = 0;
@@ -45,6 +54,8 @@ public class ViewTimetable extends SQLConnector {
                 int time2 = results.getInt("TIME2");
                 int time3 = results.getInt("TIME3");
                 
+                
+                    //convert the day to its respective number in the week
                 switch(dayLower){
                     case "monday":
                         dayWeek = 0;
@@ -62,6 +73,10 @@ public class ViewTimetable extends SQLConnector {
                         dayWeek = 4;
                         break;
                 }
+                /*
+                if the time is equal to i, the location of the time is stored in the 
+                2d array with index time[dayWeek][i] 
+                */ 
                 for(int i = 8; i <= 20; i++){
                     if(time1 == i){
                         time[dayWeek][i - 8] = 1;
